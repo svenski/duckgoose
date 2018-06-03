@@ -11,14 +11,12 @@ import shutil
 from google_images_download import google_images_download
 
 def main():
-
     image_classes = { 'ducks' : 'ducks -rubber' , 'geese' : 'geese' }
-    # download_directory = '/home/paperspace/data/downloaded_from_google'
-    # output_path = '/home/paperspace/data/ducksgeese/'
-    download_directory = '/home/paperspace/tmp/newtmp/google'
-    output_path = '/home/paperspace/tmp/newtmp/organised'
+    download_directory = '/home/paperspace/data/downloaded_from_google'
+    output_path = '/home/paperspace/data/ducksgeese/'
+    number_of_images = 1000
                       
-    downloadImagesForClasses(image_classes, download_directory, number_of_images=30)
+    downloadImagesForClasses(image_classes, download_directory, number_of_images=number_of_images)
 
     for image_class in image_classes.keys():
         sanitised_images, cannot_open, one_channel = santityCheckAndOrganiseFromGoogle(image_class, download_directory, output_path)
