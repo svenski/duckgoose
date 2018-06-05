@@ -12,14 +12,26 @@ from google_images_download import google_images_download
 
 def main():
     image_classes = { 'ducks' : 'ducks -rubber' , 'geese' : 'geese' }
-    download_directory = '/home/paperspace/data/downloaded_from_google'
+    download_path = '/home/paperspace/data/downloaded_from_google'
     output_path = '/home/paperspace/data/ducksgeese/'
     number_of_images = 1000
+    fetchImagesAndPrepForClassification(image_classes, download_path, output_path, number_of_images)
                       
-    downloadImagesForClasses(image_classes, download_directory, number_of_images=number_of_images)
+def fetchImagesAndPrepForClassification(image_classes, download_path, output_path, number_of_images):
+    """
+    Main entry point to prepare for image classification. The function will
+    1. Download jpg images from google images search for the search terms
+    2. Sanity check they can be opened and have three channels
+    3. Organise into train/valid/test folder as expected by the fastai library
+
+    Parameters:
+    The image_classes is a dictionary of image_class to search term. Often they are identical
+    """
+
+    downloadImagesForClasses(image_classes, download_path, number_of_images=number_of_images)
 
     for image_class in image_classes.keys():
-        sanitised_images, cannot_open, one_channel = santityCheckAndOrganiseFromGoogle(image_class, download_directory, output_path)
+        sanitised_images, cannot_open, one_channel = santityCheckAndOrganiseFromGoogle(image_class, download_path, output_path)
         partitonIntoTrainValidTest(sanitised_images, image_class, output_path)
 
 
@@ -83,16 +95,16 @@ def moveFilesToPath(files_to_move, output_path, prefix, ml_type):
         shutil.copy2(tt, path.join(this_path, path.basename(tt)))
 
 
-def downloadImagesForClasses(image_classes, download_directory, number_of_images=1000, chromedriver_path='/usr/lib/chromium-browser/chromedriver'):
+def downloadImagesForClasses(image_classes, download_path, number_of_images=1000, chromedriver_path='/usr/lib/chromium-browser/chromedriver'):
 
-    if not path.exists(download_directory):
-        os.makedirs(download_directory)
+    if not path.exists(download_path):
+        os.makedirs(download_path)
 
     common_arguments = {'limit' : number_of_images, 
             'format' : 'jpg',
             'color_type' : 'full-color',
             'type' : 'photo',
-            'output_directory':download_directory,
+            'output_directory':download_path,
             'chromedriver': chromedriver_path} 
             
     for image_class, search_term in image_classes.items():
