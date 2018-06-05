@@ -1,5 +1,5 @@
 # duckgoose
-Utils for fast.ai course
+Utils for the online [fast.ai](www.fast.ai) course
 
 ## Installation
 
