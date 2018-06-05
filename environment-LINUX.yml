@@ -1,4 +1,4 @@
-name: aiutils
+name: duckgoose
 channels:
   - defaults
 dependencies:
@@ -21,8 +21,5 @@ dependencies:
   - zlib=1.2.11=ha838bed_2
   - pip:
     - google-images-download==2.3.0
-    - greenlet==0.4.13
-    - msgpack==0.5.6
-    - neovim==0.2.6
     - selenium==3.12.0
 
