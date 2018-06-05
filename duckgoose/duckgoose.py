@@ -14,7 +14,7 @@ def main():
     image_classes = { 'ducks' : 'ducks -rubber' , 'geese' : 'geese' }
     download_path = '/home/paperspace/data/downloaded_from_google'
     output_path = '/home/paperspace/data/ducksgeese/'
-    number_of_images = 1000
+    number_of_images = 100
     fetchImagesAndPrepForClassification(image_classes, download_path, output_path, number_of_images)
                       
 def fetchImagesAndPrepForClassification(image_classes, download_path, output_path, number_of_images):
