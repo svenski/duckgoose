@@ -88,7 +88,7 @@ def moveFilesToPath(files_to_move, output_path, prefix, ml_type):
         shutil.copy2(tt, path.join(this_path, path.basename(tt)))
 
 
-def downloadImagesForClasses(image_classes, download_path, number_of_images=1000, chromedriver):
+def downloadImagesForClasses(image_classes, download_path, number_of_images=1000, chromedriver='/usr/lib/chromium-browser/chromedriver'):
 
     if not path.exists(download_path):
         os.makedirs(download_path)

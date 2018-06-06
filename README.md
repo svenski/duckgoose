@@ -3,7 +3,13 @@ Utils for the online [fast.ai](www.fast.ai) course
 
 ## Installation
 
+```python
+pip install duckgoose
+```
+
 ## Prerequisites 
+
+* `chromedriver` is required. 
 
 ## `fetchImagesAndPrepForClassification`
 
