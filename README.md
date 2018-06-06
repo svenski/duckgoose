@@ -9,7 +9,7 @@ pip install duckgoose
 
 ## Prerequisites 
 
-* `chromedriver` is required. 
+* `chromedriver` is required. On ubuntu/debian: `sudo apt-get chromium-chromedriver`
 
 ## `fetchImagesAndPrepForClassification`
 
