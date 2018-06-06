@@ -98,7 +98,7 @@ def downloadImagesForClasses(image_classes, download_path, number_of_images=1000
             'color_type' : 'full-color',
             'type' : 'photo',
             'output_directory':download_path,
-            'chromedriver': chromedriver_path} 
+            'chromedriver': chromedriver} 
             
     for image_class, search_term in image_classes.items():
         downloadImagesFor(image_class, search_term, common_arguments)
