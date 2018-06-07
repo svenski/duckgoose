@@ -1,24 +1,22 @@
 # duckgoose
 Utils for the online [fast.ai](www.fast.ai) course
 
+Utility for Lesson 1 experimentation with external classes. The script:
+* Downloads images from google images download for specific classes
+* Sanity check that images can be opened and have three channels
+* Organises the images into separate folders (train/valid/test + classes) as expected by the fast.ai library
+
+## Prerequisites 
+
+* `chromedriver` is required. On ubuntu/debian: `sudo apt-get chromium-chromedriver`
+
 ## Installation
 
 ```python
 pip install duckgoose
 ```
 
-## Prerequisites 
-
-* `chromedriver` is required. On ubuntu/debian: `sudo apt-get chromium-chromedriver`
-
-## `fetchImagesAndPrepForClassification`
-
-Utility for Lesson 1 experimentation with external classes. The script:
-* Downloads images from google images download for specific classes
-* Sanity check that images can be opened and have three channels
-* Organises the images into separate folders (train/valid/test + classes) as expected by the fast.ai library
-
-### Quick example
+## Usage
 
 ```python
 from duckgoose import fetchImagesAndPrepForClassification
