@@ -1,4 +1,4 @@
-from duckgoose.image_classification_bootstrap import fetchImagesAndPrepForClassification
+from duckgoose import fetchImagesAndPrepForClassification
 
 # dictionary structure `class_name => search term`
 image_classes = { 'ducks' : 'ducks -rubber' , 'geese' : 'geese' }

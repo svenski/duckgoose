@@ -58,12 +58,16 @@ def santityCheckAndOrganiseFromGoogle(image_prefix, base_path, output_path):
     return(outfiles, ioe_error_files, one_channel_files)
 
 def partitonIntoTrainValidTest(all_files, prefix, output_path, fraction_train = .6, fraction_valid = 0.3):
+    """
+    Randomnly parititons and copies files into train/valid/test directories with by default a 60/30/10% split.
+    The target is [output_path]/train/[prefix] 
+    """
 
     train_files, valid_files, test_files = shuffledSplit(all_files, fraction_train, fraction_valid)
 
-    moveFilesToPath(train_files, output_path, prefix, 'train')
-    moveFilesToPath(valid_files, output_path, prefix, 'valid')
-    moveFilesToPath(test_files, output_path, prefix, 'test')
+    copyFilesToPath(train_files, output_path, prefix, 'train')
+    copyFilesToPath(valid_files, output_path, prefix, 'valid')
+    copyFilesToPath(test_files, output_path, prefix, 'test')
 
 def shuffledSplit(all_files, fraction_train, fraction_valid):
     total_number_of_files = len(all_files)
@@ -81,7 +85,7 @@ def shuffledSplit(all_files, fraction_train, fraction_valid):
     return(train_files, valid_files, test_files)
 
 
-def moveFilesToPath(files_to_move, output_path, prefix, ml_type):
+def copyFilesToPath(files_to_move, output_path, prefix, ml_type):
     this_path = path.join(output_path,ml_type, prefix)
     os.makedirs(this_path, exist_ok=True)
     for tt in files_to_move:
@@ -89,6 +93,9 @@ def moveFilesToPath(files_to_move, output_path, prefix, ml_type):
 
 
 def downloadImagesForClasses(image_classes, download_path, number_of_images=1000, chromedriver='/usr/lib/chromium-browser/chromedriver'):
+    """
+    Download images for the specified image classes
+    """
 
     if not path.exists(download_path):
         os.makedirs(download_path)

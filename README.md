@@ -21,7 +21,7 @@ Utility for Lesson 1 experimentation with external classes. The script:
 ### Quick example
 
 ```python
-from duckgoose.image_classification_bootstrap import fetchImagesAndPrepForClassification
+from duckgoose import fetchImagesAndPrepForClassification
 
 # dictionary structure `class_name => search term`
 image_classes = { 'ducks' : 'ducks -rubber' , 'geese' : 'geese' }
