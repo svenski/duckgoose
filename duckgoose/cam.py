@@ -5,32 +5,6 @@ from fastai.model import *
 from fastai.dataset import *
 from fastai.sgdr import *
 
-
-def main():
-
-    PATH = "data/ducksgeese/"
-    sz = 224
-    arch = resnet34
-    bs = 64
-
-    learn = modelForCam(PATH, sz, arch, bs)
-
-    learn.fit(0.01, 1)
-    learn.fit(0.01, 1, cycle_len=1)
-    learn.fit(0.01, 2, cycle_len=1)
-
-    _, val_tfms = tfms_from_model(learn.model, sz)
-
-    input_image ='./data/ducksgeese/test/ducks/ducks_249.jpg' 
-    input_image ='./data/ducksgeese/test/ducks/ducks_427.jpg'
-    input_image ='./data/ducksgeese/test/geese/geese_635.jpg'
-    input_image ='./data/ducksgeese/test/geese/geese_201.jpg'
-    input_image ='./data/ducksgeese/test/geese/geese_385.jpg'
-    input_image ='./data/ducksgeese/valid/geese/geese_198.jpg'
-
-    calculateAndChartHeatZoneFor(input_image, val_tfms, learn)
-
-
 def modelForCam(PATH, sz, arch, bs):
     m = arch(True)
     m = nn.Sequential(*children(m)[:-2], 
@@ -48,17 +22,12 @@ def modelForCam(PATH, sz, arch, bs):
     return learn
 
 
-def keepthese():
-    input_image ='./data/ducksgeese/test/ducks/ducks_427.jpg'
-
-
 def calculateAndChartHeatZoneFor(input_image, val_tfms, learn):
     m = learn.model
     data = learn.data
     classes = learn.data.classes
 
     im = val_tfms(np.array(open_image(input_image)))
-
     actual = inferActualFromPath(input_image, classes)
 
     preds = learn.predict_array(im[None])
@@ -141,13 +110,16 @@ def plotCAMHeatmaps(d_im, dd, gg, actual, p_class1, classes):
     left_ax.imshow(d_im)
     left_ax.imshow(dd, alpha=alpha, cmap='hot');
     plt.title(f'{c1} heat zone')
+    plt.axis('off')
 
     middle_ax = fig.add_subplot(1,3,2)
     middle_ax.imshow(d_im)
-    plt.title(f'Original ({actual}). P({c1})={p_class1:0.2f}')
+    plt.title(f'Actual: {actual}. \nPrediction: P({c1})={p_class1:0.2f}')
+    plt.axis('off')
 
     right_ax = fig.add_subplot(1,3,3)
     right_ax.imshow(d_im)
     right_ax.imshow(gg, alpha=alpha, cmap='hot');
     plt.title(f'{c2} heat zone')
+    plt.axis('off')
 
