@@ -22,6 +22,13 @@ def modelForCam(PATH, sz, arch, bs):
     return learn
 
 
+class SaveFeatures():
+    features=None
+    def __init__(self, m): self.hook = m.register_forward_hook(self.hook_fn)
+    def hook_fn(self, module, input, output): self.features = output
+    def remove(self): self.hook.remove()
+
+
 def calculateAndChartHeatZoneFor(input_image, val_tfms, learn):
     m = learn.model
     data = learn.data
@@ -91,13 +98,6 @@ def heatmapsFor(feat, shape):
     class2_f2 = normalise_img(class2_f2, all_min, all_max)
     
     return resize_img(class1_f2, shape), resize_img(class2_f2,shape)
-
-
-class SaveFeatures():
-    features=None
-    def __init__(self, m): self.hook = m.register_forward_hook(self.hook_fn)
-    def hook_fn(self, module, input, output): self.features = output
-    def remove(self): self.hook.remove()
 
 
 def plotCAMHeatmaps(d_im, dd, gg, actual, p_class1, classes):
