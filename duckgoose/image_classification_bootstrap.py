@@ -7,6 +7,7 @@ from tempfile import TemporaryDirectory
 import gzip
 import tarfile
 import shutil
+from hashlib import md5
 
 from google_images_download import google_images_download
 
@@ -28,6 +29,10 @@ def fetchImagesAndPrepForClassification(image_classes, download_path, output_pat
         partitonIntoTrainValidTest(sanitised_images, image_class, output_path)
 
 
+def file_hash(filepath):
+    with open(filepath, "rb") as f:
+            return md5(f.read()).hexdigest()
+        
 def santityCheckAndOrganiseFromGoogle(image_prefix, base_path, output_path):
     """ Check that the images can be opened and that there are three channels. Organise into train/valid/test split by 60/30/10% """
     
@@ -38,19 +43,31 @@ def santityCheckAndOrganiseFromGoogle(image_prefix, base_path, output_path):
     outfiles = []
     ioe_error_files = []
     one_channel_files = []
+    duplicates = []
+    image_hashes = set()   
 
     num = 1
     for ff in files:
         try:
+            is_ok = True
             ii = Image.open(ff)
             number_of_channels = len(ii.getbands())
             
-            if number_of_channels == 3:
+            if number_of_channels != 3: 
+                ok = False
+                print(f'Figure does not have 3 channels: {ff}')
+            
+            hash = file_hash(ff)
+            if hash in image_hashes: 
+                is_ok = False
+                 print(f'Found duplicate: {ff}')
+            
+            image_hashes.add(hash)
+            
+            if is_ok:
                 outfiles.append(ff)
                 num +=1
-            else:
-                one_channel_files.append(ff)
-                print(f'Only one channel: {ff}')
+
         except IOError as ioe:
             ioe_error_files.append(ff)
             print(f'Error encountered for {ff}: {ioe}')
