@@ -20,6 +20,8 @@ pip install duckgoose
 
 ## Usage
 
+### Fetching, sanity check and organising images
+
 ```python
 from duckgoose import fetchImagesAndPrepForClassification
 
@@ -32,7 +34,48 @@ number_of_images = 100
 fetchImagesAndPrepForClassification(image_classes, download_path, output_path, number_of_images)
 ```
 
-TODO: add usage for CAM
+### Create Class Activation Maps (CAM)
+
+Here is a full example of creating a class activation maps for ducks and geese using fast ai. 
+
+```python
+from fastai.imports import *
+from fastai.transforms import *
+from fastai.conv_learner import *
+from fastai.model import *
+from fastai.dataset import *
+from fastai.sgdr import *
+from fastai.plots import *
+
+from duckgoose.cam import calculateAndChartHeatZoneFor
+
+PATH = "data/ducksgeese/"
+sz=224
+arch = resnet34
+bs = 64
+
+m = arch(True)
+m = nn.Sequential(*children(m)[:-2], 
+                  nn.Conv2d(512, 2, 3, padding=1), 
+                  nn.AdaptiveAvgPool2d(1),
+                  Flatten(), 
+                  nn.LogSoftmax())
+
+tfms = tfms_from_model(arch, sz, aug_tfms=transforms_side_on, max_zoom=1.1)
+data = ImageClassifierData.from_paths(PATH, tfms=tfms, bs=bs)
+learn = ConvLearner.from_model_data(m, data)
+
+learn.freeze_to(-4)
+
+_, val_tfms = tfms_from_model(learn.model, sz)
+
+learn.fit(0.01, 2)
+
+calculateAndChartHeatZoneFor('./data/ducksgeese/test/ducks/ducks_427.jpg', val_tfms, learn)
+```
+
+![Duck and goose heatmap](images/duck.png)
+
 
 # License
 [The MIT License (MIT)](LICENSE.txt)
