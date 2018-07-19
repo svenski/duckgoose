@@ -43,7 +43,6 @@ def santityCheckAndOrganiseFromGoogle(image_prefix, base_path, output_path):
     outfiles = []
     ioe_error_files = []
     one_channel_files = []
-    duplicates = []
     image_hashes = set()   
 
     num = 1
@@ -60,7 +59,7 @@ def santityCheckAndOrganiseFromGoogle(image_prefix, base_path, output_path):
             hash = file_hash(ff)
             if hash in image_hashes: 
                 is_ok = False
-                 print(f'Found duplicate: {ff}')
+                print(f'Found duplicate: {ff}')
             
             image_hashes.add(hash)
             
