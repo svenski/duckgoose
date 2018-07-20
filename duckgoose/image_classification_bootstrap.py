@@ -54,7 +54,7 @@ def santityCheckAndOrganiseFromGoogle(image_prefix, base_path, output_path):
             number_of_channels = len(ii.getbands())
             
             if number_of_channels != 3: 
-                ok = False
+                is_ok = False
                 print(f'Figure does not have 3 channels: {ff}')
             
             hash = file_hash(ff)
