@@ -1,9 +1,9 @@
 # duckgoose
-Utility scripts for the online [fast.ai](www.fast.ai) course
+Utility scripts for the online [fast.ai](www.fast.ai) course. There are two main parts: one to download and organise arbitrary image classes, and one to highlight what parts of an image is activating the decision for a classification.
 
-1. Utility for Lesson 1 experimentation with external classes. The script:
-* Downloads images from google images download for specific classes
-* Sanity check that images can be opened and have three channels
+1. Utility for Lesson 1 experimentation with external image classes. The script:
+* Downloads images from google images for specific classes
+* Sanity checks that images can be opened and have three channels
 * Organises the images into separate folders (train/valid/test + classes) as expected by the fast.ai library
 
 2. Utility for creating Class Activation Maps for both classifications.
@@ -20,7 +20,7 @@ pip install duckgoose
 
 ## Usage
 
-### Fetching, sanity check and organising images
+### Fetching, sanity checking and organising images
 
 ```python
 from duckgoose import fetchImagesAndPrepForClassification
