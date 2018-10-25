@@ -35,7 +35,7 @@ fetchImagesAndPrepForClassification(image_classes, download_path, output_path, n
 ```
 
 ### Create Class Activation Maps (CAM)
-
+*Note*: This was implemented for fastai v2 part 1.
 Here is a full example of creating a class activation maps for ducks and geese using fast ai. 
 
 ```python
