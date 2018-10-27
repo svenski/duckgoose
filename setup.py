@@ -4,7 +4,7 @@ with open("README.md", 'r') as f:
     long_description = f.read()
 
 setup(name='duckgoose',
-      version='0.1.6',
+      version='0.1.7',
       description='Utility functions for the fast ai mooc',
       url='http://github.com/svenski/duckgoose',
       author='Sergiusz Bleja',

@@ -37,7 +37,7 @@ def santityCheckAndOrganiseFromGoogle(image_prefix, base_path, output_path):
     """ Check that the images can be opened and that there are three channels. Organise into train/valid/test split by 60/30/10% """
     
     # This is tied to the google download settings: specifically using the prefix == class
-    gg = f'{base_path}/**/{image_prefix} *.jpg'
+    gg = f'{base_path}/**/*{image_prefix} *.jpg'
 
     files = glob.glob(gg, recursive=True)
     outfiles = []
