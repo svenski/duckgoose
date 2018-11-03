@@ -8,10 +8,11 @@ import gzip
 import tarfile
 import shutil
 from hashlib import md5
+from collections import defaultdict
 
 from google_images_download import google_images_download
 
-def fetchImagesAndPrepForClassification(image_classes, download_path, output_path, number_of_images, chromedriver='/usr/lib/chromium-browser/chromedriver'):
+def fetchImagesAndPrepForClassification(image_classes, download_path, output_path, number_of_images, chromedriver='/usr/lib/chromium-browser/chromedriver', download_if_paths_exists = True):
     """
     Main entry point to prepare for image classification. The function will
     1. Download jpg images from google images search for the search terms
@@ -22,13 +23,47 @@ def fetchImagesAndPrepForClassification(image_classes, download_path, output_pat
     The image_classes is a dictionary of image_class to search term. Often they are identical
     """
 
-    downloadImagesForClasses(image_classes, download_path, number_of_images=number_of_images, chromedriver=chromedriver)
+    if download_if_paths_exists:
+        do_download = True
+    else:
+        do_download = not download_paths_exist(image_classes, download_path)
+
+    if do_download:
+        downloadImagesForClasses(image_classes, download_path, number_of_images=number_of_images, chromedriver=chromedriver)
+    else: 
+        print("Skipping download")
 
     for image_class in image_classes.keys():
         sanitised_images, cannot_open, one_channel = santityCheckAndOrganiseFromGoogle(image_class, download_path, output_path)
         partitonIntoTrainValidTest(sanitised_images, image_class, output_path)
 
 
+def download_paths_exist(image_classes, download_path):
+    exists = [path.exists(path.join(download_path, x)) for x in image_classes]
+    return all(exists)
+
+def processDuplicates(base_path):
+    gg = f'{base_path}/**/*.jpg'
+
+    files = glob.glob(gg, recursive=True)
+    image_hashes = defaultdict(list)
+    
+    for ff in files:
+        image_hashes[file_hash(ff)].append(ff)
+
+    duplicates = {k:v for k,v in image_hashes.items() if len(v) > 1}
+        
+    for dd in duplicates.values():
+        if all_of_same_class(dd, base_path):
+
+
+
+def all_of_same_class(dupes, base_path):
+    return len(set([extract_class_for(dd, base_path) for dd in dupes]))
+
+def extract_class_for(dd, base_path):
+
+                
 def file_hash(filepath):
     with open(filepath, "rb") as f:
             return md5(f.read()).hexdigest()
@@ -43,7 +78,6 @@ def santityCheckAndOrganiseFromGoogle(image_prefix, base_path, output_path):
     outfiles = []
     ioe_error_files = []
     one_channel_files = []
-    image_hashes = set()   
 
     num = 1
     for ff in files:
