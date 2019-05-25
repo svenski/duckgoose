@@ -12,6 +12,7 @@ from collections import defaultdict
 
 from google_images_download import google_images_download
 
+
 def fetchImagesAndPrepForClassification(image_classes, download_path, output_path, number_of_images, chromedriver='/usr/lib/chromium-browser/chromedriver', download_if_paths_exists = True):
     """
     Main entry point to prepare for image classification. The function will
@@ -42,35 +43,14 @@ def download_paths_exist(image_classes, download_path):
     exists = [path.exists(path.join(download_path, x)) for x in image_classes]
     return all(exists)
 
-def processDuplicates(base_path):
-    gg = f'{base_path}/**/*.jpg'
-
-    files = glob.glob(gg, recursive=True)
-    image_hashes = defaultdict(list)
-    
-    for ff in files:
-        image_hashes[file_hash(ff)].append(ff)
-
-    duplicates = {k:v for k,v in image_hashes.items() if len(v) > 1}
-        
-    for dd in duplicates.values():
-        if all_of_same_class(dd, base_path):
-
-
-
-def all_of_same_class(dupes, base_path):
-    return len(set([extract_class_for(dd, base_path) for dd in dupes]))
-
-def extract_class_for(dd, base_path):
-
                 
 def file_hash(filepath):
     with open(filepath, "rb") as f:
             return md5(f.read()).hexdigest()
         
+
 def santityCheckAndOrganiseFromGoogle(image_prefix, base_path, output_path):
     """ Check that the images can be opened and that there are three channels. Organise into train/valid/test split by 60/30/10% """
-    
     # This is tied to the google download settings: specifically using the prefix == class
     gg = f'{base_path}/**/*{image_prefix} *.jpg'
 
@@ -78,6 +58,7 @@ def santityCheckAndOrganiseFromGoogle(image_prefix, base_path, output_path):
     outfiles = []
     ioe_error_files = []
     one_channel_files = []
+    image_hashes = set()
 
     num = 1
     for ff in files:
@@ -107,6 +88,7 @@ def santityCheckAndOrganiseFromGoogle(image_prefix, base_path, output_path):
 
     return(outfiles, ioe_error_files, one_channel_files)
 
+
 def partitonIntoTrainValidTest(all_files, prefix, output_path, fraction_train = .6, fraction_valid = 0.3):
     """
     Randomnly parititons and copies files into train/valid/test directories with by default a 60/30/10% split.
@@ -118,6 +100,7 @@ def partitonIntoTrainValidTest(all_files, prefix, output_path, fraction_train = 
     copyFilesToPath(train_files, output_path, prefix, 'train')
     copyFilesToPath(valid_files, output_path, prefix, 'valid')
     copyFilesToPath(test_files, output_path, prefix, 'test')
+
 
 def shuffledSplit(all_files, fraction_train, fraction_valid):
     total_number_of_files = len(all_files)
@@ -161,15 +144,12 @@ def downloadImagesForClasses(image_classes, download_path, number_of_images=1000
         downloadImagesFor(image_class, search_term, common_arguments)
 
 
-def downloadImagesFor(keyword, prefix = None, common_arguments = {}):
-    if prefix is None:
-        prefix = keyword
+def downloadImagesFor(prefix, search_term, common_arguments = {}):
 
     search = common_arguments.copy()
-    search['keywords'] = keyword
+    search['keywords'] = search_term
     search['prefix'] = prefix
 
     resp = google_images_download.googleimagesdownload()
     paths = resp.download(search)
-
 
